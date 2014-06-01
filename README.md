@@ -10,3 +10,9 @@ instead of recreating the thumbnail again, allowing for faster page loading.
 
 I've found this code very useful over the years, much better than having to create pre-sized thumbnails, and then having
 to tailor your site around them.
+
+An example usage would be as follows:
+
+```html
+<img src="/path/to/code/thumbnail.php?file=relative_path_to_image.jpg&w=100&h=100" alt="" />
+```
