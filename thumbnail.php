@@ -7,7 +7,7 @@
   $image = new ImageEdit();
   
   $file = $_GET['file'];
-  $file = $image->relToAbs($file);
+  $file = realpath($file);
   
   $ext = $iamge->getFileExtension($file);
   
@@ -15,7 +15,7 @@
   $height = (int)$_GET['h'];
   
   $tmp = TMP_DIR . md5(basename($file.$width.$height)).".".$ext;
-  $tmp = $image->relToAbs($tmp);
+  $tmp = dirname($file) . "/" . $tmp; // you may need to tweak this depending on where you want to save thumbnails
   
 // We've already created this thumbnail - use the cached one.
   if(file_exists($tmp) && filemtime($tmp) >= time())
