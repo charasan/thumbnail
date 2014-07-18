@@ -21,20 +21,43 @@ class ImageEdit
     public function load($filename)
     {
       if(!file_exists($filename))
-        $filename = AX_Tool::relToAbs($filename);
+        $filename = self::relToAbs($filename);
 
       $this->filename = $filename;
       $this->thumb = dirname($filename).'/thumb-'.basename($filename);
+      $ext = strtolower(self::getFileExtension($filename));
       
-      $image_info = getimagesize($filename);
-      $this->image_type = $image_info[2];
-
-      if( $this->image_type == IMAGETYPE_JPEG )
-        $this->image = imagecreatefromjpeg($filename);
-      elseif( $this->image_type == IMAGETYPE_GIF )
-        $this->image = imagecreatefromgif($filename);
-      elseif( $this->image_type == IMAGETYPE_PNG )
-        $this->image = imagecreatefrompng($filename);
+      switch($ext) {
+        case "jpg":
+        case "jpeg":
+          $this->image_type = IMAGETYPE_JPEG;
+          if(isset($raw))
+            $this->image = imagecreatefromstring($raw);
+          else
+            $this->image = imagecreatefromjpeg($filename);
+          break;
+        case "gif":
+          $this->image_type = IMAGETYPE_GIF;
+          if(isset($raw))
+            $this->image = imagecreatefromstring($raw);
+          else
+            $this->image = imagecreatefromgif($filename);
+          break;
+        case "png":
+          $this->image_type = IMAGETYPE_PNG;
+          if(isset($raw))
+            $this->image = imagecreatefromstring($raw);
+          else
+            $this->image = imagecreatefrompng($filename);
+          break;
+        default:
+          $this->image_type = IMAGETYPE_JPEG;
+          if(isset($raw))
+            $this->image = imagecreatefromstring($raw);
+          else
+            $this->image = imagecreatefromjpeg($filename);
+          break;
+      }
 
       if ($this->image_type == IMAGETYPE_GIF || $this->image_type == IMAGETYPE_PNG)
       {
@@ -43,14 +66,24 @@ class ImageEdit
       }
     }
     
-    public function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null)
+    public function save($filename, $image_type='jpeg', $compression=75, $permissions=null)
     {
-      if( $image_type == IMAGETYPE_JPEG )
+      if( $image_type == 'jpeg' || $image_type == 'jpg' )
+      {
+        header("Content-type: image/jpeg");
         imagejpeg($this->image,$filename,$compression);
-      elseif( $image_type == IMAGETYPE_GIF )      
-        imagegif($this->image,$filename);         
-      elseif( $image_type == IMAGETYPE_PNG )
+      }
+      elseif( $image_type == 'gif' )
+      {
+        header("Content-type: image/gif");
+        imagegif($this->image,$filename);
+      }
+      elseif( $image_type == 'png' )
+      {
+        header("Content-type: image/png");
         imagepng($this->image,$filename);
+      }
+
       if( $permissions != null)
         chmod($filename,$permissions);
       imagedestroy($this->image);
