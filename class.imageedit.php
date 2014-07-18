@@ -21,7 +21,7 @@ class ImageEdit
     public function load($filename)
     {
       if(!file_exists($filename))
-        $filename = self::relToAbs($filename);
+        $filename = realpath($filename);
 
       $this->filename = $filename;
       $this->thumb = dirname($filename).'/thumb-'.basename($filename);
