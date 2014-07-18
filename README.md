@@ -16,3 +16,6 @@ An example usage would be as follows:
 ```html
 <img src="/path/to/code/thumbnail.php?file=relative_path_to_image.jpg&w=100&h=100" alt="" />
 ```
+UPDATE: Originally, I just quickly stripped my thumbnail code out of its original home, made some quick edits, and uploaded it...without testing it. I know, I know...bad developer. After encountering a problem with the live implementation, I made a few modifications, came back and updated here, and this time TESTED the code.
+
+DEMO: http://www.charasan.com/thumbnail
