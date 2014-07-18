@@ -2,6 +2,8 @@
   include_once "class.imageedit.php";
  
   define('THUMB_TIMEOUT', 600);
+  define('TMP_DIR', '/tmp/'); // change this to wherever you want to store cached images
+  
   $image = new ImageEdit();
   
   $file = $_GET['file'];
@@ -12,7 +14,8 @@
   $width = (int)$_GET['w'];
   $height = (int)$_GET['h'];
   
-  $tmp = "/tmp/".md5(basename($file.$width.$height)).".".$ext; // change this to wherever you want to store cached images
+  $tmp = TMP_DIR . md5(basename($file.$width.$height)).".".$ext;
+  $tmp = $image->relToAbs($tmp);
   
 // We've already created this thumbnail - use the cached one.
   if(file_exists($tmp) && filemtime($tmp) >= time())
@@ -32,13 +35,13 @@
   if($image->getWidth() > $image->getHeight())
   {
     $image->resizeToWidth($width);
-    $image->save($tmp);
+    $image->save($tmp, $ext);
     @touch($tmp, time() + THUMB_TIMEOUT);
   }
   else
   {
     $image->resizeToHeight($height);
-    $image->save($tmp);
+    $image->save($tmp, $ext);
     @touch($tmp, time() + THUMB_TIMEOUT);
   }
 
