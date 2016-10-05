@@ -9,7 +9,7 @@
   $file = $_GET['file'];
   $file = realpath($file);
   
-  $ext = $iamge->getFileExtension($file);
+  $ext = $image->getFileExtension($file);
   
   $width = (int)$_GET['w'];
   $height = (int)$_GET['h'];
